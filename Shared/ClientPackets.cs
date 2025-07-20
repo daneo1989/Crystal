@@ -2575,4 +2575,29 @@ namespace ClientPackets
         protected override void WritePacket(BinaryWriter writer)
         { }
     }
+
+    public sealed class SaveNotebook : Packet
+    {
+        public override short Index => (short)ClientPacketIds.SaveNotebook;
+        public string Content;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Content = reader.ReadString();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Content);
+        }
+    }
+
+    public sealed class RequestNotebook : Packet
+    {
+        public override short Index => (short)ClientPacketIds.RequestNotebook;
+
+        protected override void ReadPacket(BinaryReader reader) { }
+
+        protected override void WritePacket(BinaryWriter writer) { }
+    }
 }

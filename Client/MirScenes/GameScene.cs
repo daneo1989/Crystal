@@ -144,7 +144,8 @@ namespace Client.MirScenes
         public TimerDialog TimerControl;
         public CompassDialog CompassControl;
         public RollDialog RollControl;
-
+        
+        public AdventurerJournalDialog AdventurerJournalDialog;
 
         public static List<ItemInfo> ItemInfoList = new List<ItemInfo>();
         public static List<UserId> UserIdList = new List<UserId>();
@@ -312,6 +313,8 @@ namespace Client.MirScenes
             TimerControl = new TimerDialog { Parent = this, Visible = false };
             CompassControl = new CompassDialog { Parent = this, Visible = false };
             RollControl = new RollDialog { Parent = this, Visible = false };
+
+            AdventurerJournalDialog = new AdventurerJournalDialog { Parent = this, Visible = false };   
 
             for (int i = 0; i < OutputLines.Length; i++)
                 OutputLines[i] = new MirLabel
@@ -2007,6 +2010,10 @@ namespace Client.MirScenes
                     break;
                 case (short)ServerPacketIds.GuildTerritoryPage:
                     GuildTerritoryPage((S.GuildTerritoryPage)p);
+                    break;
+                case (short)ServerPacketIds.NotebookText:
+                    AdventurerJournalDialog.Instance = null;
+                    NotebookText((S.NotebookText)p);
                     break;
                 default:
                     base.ProcessPacket(p);
@@ -5855,7 +5862,22 @@ namespace Client.MirScenes
             GuildTerritoryDialog.Lenght = p.length;
             GuildTerritoryDialog.UpdateInterface();
         }
+        private void NotebookText(S.NotebookText p)
+        {
+            if (AdventurerJournalDialog.Instance == null)
+            {
+                AdventurerJournalDialog.Instance = new AdventurerJournalDialog
+                {
+                    Parent = GameScene.Scene
+                };
+            }
 
+            // ✅ Always update the content, even if the dialog already exists
+            AdventurerJournalDialog.Instance.SetNotebookText(p.Content);
+
+            // ❌ DO NOT auto-show here
+            // JournalDialog.Instance.Visible = true;
+        }
         private void HeroCreateRequest(S.HeroCreateRequest p)
         {            
             NewHeroDialog.WarriorButton.Visible = p.CanCreateClass[(int)MirClass.Warrior];

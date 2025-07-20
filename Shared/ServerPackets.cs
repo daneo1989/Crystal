@@ -735,12 +735,12 @@ namespace ServerPackets
         {
             get { return (short)ServerPacketIds.UserSlotsRefresh; }
         }
-  
+
         public UserItem[] Inventory, Equipment;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            
+
             if (reader.ReadBoolean())
             {
                 Inventory = new UserItem[reader.ReadInt32()];
@@ -841,8 +841,8 @@ namespace ServerPackets
         public MirDirection Direction;
         public byte Hair;
         public byte Light;
-		public short Weapon, WeaponEffect, Armour;
-		public PoisonType Poison;
+        public short Weapon, WeaponEffect, Armour;
+        public PoisonType Poison;
         public bool Dead, Hidden;
         public SpellEffect Effect;
         public byte WingEffect;
@@ -877,8 +877,8 @@ namespace ServerPackets
             Hair = reader.ReadByte();
             Light = reader.ReadByte();
             Weapon = reader.ReadInt16();
-			WeaponEffect = reader.ReadInt16();
-			Armour = reader.ReadInt16();
+            WeaponEffect = reader.ReadInt16();
+            Armour = reader.ReadInt16();
             Poison = (PoisonType)reader.ReadUInt16();
             Dead = reader.ReadBoolean();
             Hidden = reader.ReadBoolean();
@@ -920,8 +920,8 @@ namespace ServerPackets
             writer.Write(Hair);
             writer.Write(Light);
             writer.Write(Weapon);
-			writer.Write(WeaponEffect);
-			writer.Write(Armour);
+            writer.Write(WeaponEffect);
+            writer.Write(Armour);
             writer.Write((ushort)Poison);
             writer.Write(Dead);
             writer.Write(Hidden);
@@ -1675,8 +1675,8 @@ namespace ServerPackets
 
         public uint ObjectID;
         public byte Light;
-		public short Weapon, WeaponEffect, Armour;
-		public byte WingEffect;
+        public short Weapon, WeaponEffect, Armour;
+        public byte WingEffect;
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -1684,8 +1684,8 @@ namespace ServerPackets
 
             Light = reader.ReadByte();
             Weapon = reader.ReadInt16();
-			WeaponEffect = reader.ReadInt16();
-			Armour = reader.ReadInt16();
+            WeaponEffect = reader.ReadInt16();
+            Armour = reader.ReadInt16();
             WingEffect = reader.ReadByte();
         }
 
@@ -1695,8 +1695,8 @@ namespace ServerPackets
 
             writer.Write(Light);
             writer.Write(Weapon);
-			writer.Write(WeaponEffect);
-			writer.Write(Armour);
+            writer.Write(WeaponEffect);
+            writer.Write(Armour);
             writer.Write(WingEffect);
         }
     }
@@ -2072,7 +2072,7 @@ namespace ServerPackets
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Image = reader.ReadUInt16();
             grade = (ItemGrade)reader.ReadByte();
-		}
+        }
 
         protected override void WritePacket(BinaryWriter writer)
         {
@@ -2083,7 +2083,7 @@ namespace ServerPackets
             writer.Write(Location.Y);
             writer.Write(Image);
             writer.Write((byte)grade);
-		}
+        }
     }
     public sealed class ObjectGold : Packet
     {
@@ -4832,12 +4832,12 @@ namespace ServerPackets
 
         public Stat Stat;
         public uint Value;
-        protected override void ReadPacket(BinaryReader reader) 
+        protected override void ReadPacket(BinaryReader reader)
         {
             Stat = (Stat)reader.ReadByte();
             Value = reader.ReadUInt32();
         }
-        protected override void WritePacket(BinaryWriter writer) 
+        protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte)Stat);
             writer.Write(Value);
@@ -5545,7 +5545,7 @@ namespace ServerPackets
             writer.Write(Interrupted);
         }
     }
-    
+
     public sealed class SetElemental : Packet
     {
         public override short Index { get { return (short)ServerPacketIds.SetElemental; } }
@@ -6422,7 +6422,7 @@ namespace ServerPackets
             HasData = reader.ReadBoolean();
 
             if (HasData)
-                LoanItem = new UserItem(reader); 
+                LoanItem = new UserItem(reader);
         }
 
         protected override void WritePacket(BinaryWriter writer)
@@ -6701,6 +6701,21 @@ namespace ServerPackets
         {
             writer.Write(Location.X);
             writer.Write(Location.Y);
+        }
+    }
+    public sealed class NotebookText : Packet
+    {
+        public override short Index => (short)ServerPacketIds.NotebookText;
+        public string Content;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Content = reader.ReadString();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Content);
         }
     }
 }

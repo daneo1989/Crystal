@@ -385,6 +385,8 @@ public abstract class Packet
                 return new C.ConfirmItemRental();
             case (short)ClientPacketIds.GuildTerritoryPage:
                 return new C.GuildTerritoryPage();
+            case (short)ClientPacketIds.SaveNotebook:
+                return new C.SaveNotebook();
             default:
                 return null;
         }
@@ -942,6 +944,8 @@ public abstract class Packet
                 return new S.SetCompass();
             case (short)ServerPacketIds.GuildTerritoryPage:
                 return new S.GuildTerritoryPage();
+            case (short)ServerPacketIds.NotebookText:
+                return new S.NotebookText();
             default:
                 return null;
         }
