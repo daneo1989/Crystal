@@ -573,9 +573,23 @@ namespace Client.MirScenes
                         if (!RankingDialog.Visible) RankingDialog.Show();
                         else RankingDialog.Hide();
                         break;
-                    case KeybindOptions.Quests:
-                        if (!QuestLogDialog.Visible) QuestLogDialog.Show();
-                        else QuestLogDialog.Hide();
+                    //case KeybindOptions.Quests:
+                    //    if (!QuestLogDialog.Visible) QuestLogDialog.Show();
+                    //    else QuestLogDialog.Hide();
+                    //    break;
+                    case KeybindOptions.Journal:
+                        if (AdventurerJournalDialog.Instance == null)
+                            return;
+
+                        if (!AdventurerJournalDialog.Instance.Visible)
+                        {
+                            AdventurerJournalDialog.Instance.Show();
+                            AdventurerJournalDialog.Instance.ShowNotebookTab(null, EventArgs.Empty); // ✅ Force tab to Notebook
+                        }
+                        else
+                        {
+                            AdventurerJournalDialog.Instance.Hide();
+                        }
                         break;
                     case KeybindOptions.Exit:
                         QuitGame();
@@ -1201,6 +1215,7 @@ namespace Client.MirScenes
             InventoryDialog.Process();
             GameShopDialog.Process();
             MiniMapDialog.Process();
+            AdventurerJournalDialog.Instance?.Process();
 
             foreach (SkillBarDialog Bar in Scene.SkillBarDialogs)
                 Bar.Process();
@@ -5871,12 +5886,8 @@ namespace Client.MirScenes
                     Parent = GameScene.Scene
                 };
             }
-
-            // ✅ Always update the content, even if the dialog already exists
             AdventurerJournalDialog.Instance.SetNotebookText(p.Content);
 
-            // ❌ DO NOT auto-show here
-            // JournalDialog.Instance.Visible = true;
         }
         private void HeroCreateRequest(S.HeroCreateRequest p)
         {            

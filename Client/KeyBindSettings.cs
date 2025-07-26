@@ -36,6 +36,7 @@
         Guilds,
         GameShop,
         Quests,
+        Journal,
         Closeall,
         Options,
         Options2,
@@ -216,7 +217,9 @@
             list.Add(InputKey);
             InputKey = new KeyBind { Group = "Dialogs", Description = "Gameshop Open/Close", function = KeybindOptions.GameShop, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Y };
             list.Add(InputKey);
-            InputKey = new KeyBind { Group = "Dialogs", Description = "Quest Diary Open/Close", function = KeybindOptions.Quests, RequireAlt = 0, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Q };
+            //InputKey = new KeyBind { Group = "Dialogs", Description = "Quest Diary Open/Close", function = KeybindOptions.Quests, RequireAlt = 0, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Q };
+            //list.Add(InputKey);
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Adventurer Journal Open/Close", function = KeybindOptions.Journal, RequireAlt = 0, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Q };
             list.Add(InputKey);
             InputKey = new KeyBind { Group = "Dialogs", Description = "Options Open/Close", function = KeybindOptions.Options, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.F12 };
             list.Add(InputKey);

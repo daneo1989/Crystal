@@ -30,7 +30,7 @@
 
         FlagIndexCount = 1999,
 
-        MaxConcurrentQuests = 20,
+        MaxConcurrentQuests = 40,
 
         LogDelay = 10000,
 

@@ -153,6 +153,7 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 PressedIndex = 1911,
                 Sound = SoundList.ButtonA,
+                Hint = string.Format(GameLanguage.Journal, CMain.InputKeys.GetKey(KeybindOptions.Journal))
             };
             JournalButton.Click += (o, e) =>
             {

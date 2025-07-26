@@ -1927,3 +1927,12 @@ public enum MarketCollectionMode : byte
     Sold = 1,
     Expired = 2
 }
+
+public enum QuestTaskType
+{
+    Kill,
+    Carry,
+    Collect,
+    Discover,
+    Unknown
+}
