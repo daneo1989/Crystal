@@ -889,8 +889,10 @@ namespace Client.MirScenes.Dialogs
 
         private void OnFilterLabelClick(int index)
         {
-            if (index < 0 || index >= VisibleFilterOptions.Count) return;
-            var selected = VisibleFilterOptions[index];
+            int actualIndex = FilterScrollOffset + index;
+            if (actualIndex < 0 || actualIndex >= VisibleFilterOptions.Count) return;
+
+            var selected = VisibleFilterOptions[actualIndex];
 
             if (selected.IsHeader)
             {
@@ -901,17 +903,8 @@ namespace Client.MirScenes.Dialogs
 
             void Toggle(HashSet<string> set, string name)
             {
-                if (name == "Show All")
-                {
-                    set.Clear();
-                }
-                else
-                {
-                    if (set.Contains(name))
-                        set.Remove(name);
-                    else
-                        set.Add(name);
-                }
+                if (name == "Show All") set.Clear();
+                else if (!set.Add(name)) set.Remove(name);
             }
 
             switch (selected.Type)

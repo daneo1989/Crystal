@@ -432,49 +432,52 @@ namespace Server.Database
         {
             var col = itemInfoGridView.Columns[e.ColumnIndex];
 
-            if (col.Name.Equals("Modified", comparisonType: StringComparison.CurrentCultureIgnoreCase) ||
-                col.Name.Equals("ItemIndex", comparisonType: StringComparison.CurrentCultureIgnoreCase))
-            {
+            if (col.Name.Equals("Modified", StringComparison.CurrentCultureIgnoreCase) ||
+                col.Name.Equals("ItemIndex", StringComparison.CurrentCultureIgnoreCase))
                 return;
-            }
-
-            var cell = itemInfoGridView.Rows[e.RowIndex].Cells[col.Name];
 
             var val = e.FormattedValue.ToString();
-
             itemInfoGridView.Rows[e.RowIndex].ErrorText = "";
 
-            //Only AttackSpeed stat can be negative
-            if (col.ValueType == typeof(int) && col.Name != "StatAttackSpeed" && int.TryParse(val, out int val1) && val1 < 0)
+            // ✅ Replace this section to allow negative values for certain stats
+            string[] allowNegative = new[]
+            {
+        "StatAttackSpeed", "StatAgility", "StatAccuracy",
+        "StatMinAC", "StatMaxAC", "StatMinMAC", "StatMaxMAC",
+        "StatMinDC", "StatMaxDC", "StatMinMC", "StatMaxMC",
+        "StatMinSC", "StatMaxSC", "StatHP", "StatMP"
+    };
+
+            if (col.ValueType == typeof(int) && !allowNegative.Contains(col.Name) && int.TryParse(val, out int val1) && val1 < 0)
             {
                 e.Cancel = true;
-                itemInfoGridView.Rows[e.RowIndex].ErrorText = "the value must be a positive integer";
+                itemInfoGridView.Rows[e.RowIndex].ErrorText = "Negative values are not allowed for this stat.";
             }
 
             if (col.ValueType == typeof(int) && !int.TryParse(val, out _))
             {
                 e.Cancel = true;
-                itemInfoGridView.Rows[e.RowIndex].ErrorText = "the value must be an integer";
+                itemInfoGridView.Rows[e.RowIndex].ErrorText = "The value must be an integer.";
             }
             else if (col.ValueType == typeof(byte) && !byte.TryParse(val, out _))
             {
                 e.Cancel = true;
-                itemInfoGridView.Rows[e.RowIndex].ErrorText = "the value must be a byte";
+                itemInfoGridView.Rows[e.RowIndex].ErrorText = "The value must be a byte.";
             }
             else if (col.ValueType == typeof(short) && !short.TryParse(val, out _))
             {
                 e.Cancel = true;
-                itemInfoGridView.Rows[e.RowIndex].ErrorText = "the value must be a short";
+                itemInfoGridView.Rows[e.RowIndex].ErrorText = "The value must be a short.";
             }
             else if (col.ValueType == typeof(ushort) && !ushort.TryParse(val, out _))
             {
                 e.Cancel = true;
-                itemInfoGridView.Rows[e.RowIndex].ErrorText = "the value must be a ushort";
+                itemInfoGridView.Rows[e.RowIndex].ErrorText = "The value must be a ushort.";
             }
             else if (col.ValueType == typeof(long) && !long.TryParse(val, out _))
             {
                 e.Cancel = true;
-                itemInfoGridView.Rows[e.RowIndex].ErrorText = "the value must be a long";
+                itemInfoGridView.Rows[e.RowIndex].ErrorText = "The value must be a long.";
             }
 
             if (!e.Cancel)
@@ -916,7 +919,7 @@ namespace Server.Database
 
         private void ItemInfoGridView_MouseClick(object sender, MouseEventArgs e)
         {
-            
+
             if (e.Button == MouseButtons.Right &&
                 itemInfoGridView.SelectedRows.Count > 1)
             {
@@ -956,7 +959,7 @@ namespace Server.Database
 
                         // for some reason datagridview doesn't reflect selected cell value updating like this
                         // so re-assigning value fixes it. 
-                        if(itemInfoGridView.Rows[mouseOverRow].Cells[mouseOverCol] is DataGridViewCheckBoxCell)
+                        if (itemInfoGridView.Rows[mouseOverRow].Cells[mouseOverCol] is DataGridViewCheckBoxCell)
                         {
                             itemInfoGridView.Rows[mouseOverRow].Cells[mouseOverCol].Value = updateValue;
                         }
@@ -1022,7 +1025,7 @@ namespace Server.Database
                 var itemType = itemInfoGridView.CurrentRow.Cells["ItemType"];
                 bool isGemSelected = (global::ItemType)itemType.Value == global::ItemType.Gem;
                 SwapGemContext(isGemSelected);
-            }   
+            }
         }
 
         private void CurrentCellDirtyStateChanged(object sender, EventArgs e)
