@@ -1141,6 +1141,8 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.NewItemInfo; }
         }
 
+        public override bool Observable => false;
+
         public ItemInfo Info;
 
         protected override void ReadPacket(BinaryReader reader)
