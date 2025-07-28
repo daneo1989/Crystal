@@ -109,6 +109,9 @@ namespace Client.MirObjects
             SummonedCreatureType = info.SummonedCreatureType;
             CreatureSummoned = info.CreatureSummoned;
 
+            CharacterTitle = info.CharacterTitle;
+            TitleColorARGB = info.TitleColorARGB;
+
             BindAllItems();
 
             RefreshStats();

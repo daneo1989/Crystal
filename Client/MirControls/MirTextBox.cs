@@ -234,6 +234,7 @@ namespace Client.MirControls
         public override void MultiLine()
         {
             TextBox.Multiline = true;
+            TextBox.ScrollBars = ScrollBars.Vertical;
             TextBox.Size = Size;
 
             DisposeTexture();

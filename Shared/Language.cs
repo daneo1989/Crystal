@@ -23,6 +23,7 @@
                          Character = "Character ({0})",
                          Skills = "Skills ({0})",
                          Quests = "Quests ({0})",
+                         Journal = "Adventurer Journal ({0})",
                          Options = "Options ({0})",
                          Menu = "Menu",
                          GameShop = "Game Shop ({0})",
@@ -236,7 +237,7 @@
                          RequestDivorce = "Request Divorce",
                          MailLover = "Mail Lover",
                          WhisperLover = "Whisper Lover";
-
+                        
     //Server
     public static string Welcome = "Welcome to the {0} Server.",
                          OnlinePlayers = "Online Players: {0}",

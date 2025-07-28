@@ -425,6 +425,14 @@ namespace Server.MirObjects
 
                     CheckList.Add(new NPCChecks(CheckType.CheckBuff, parts[1]));
                     break;
+                case "CURRENTTITLE":
+                    if (parts.Length < 2) return;
+                    quoteMatch = regexQuote.Match(line);
+                    string titleName = parts[1];
+                    if (quoteMatch.Success)
+                        titleName = quoteMatch.Groups[1].Captures[0].Value;
+                    CheckList.Add(new NPCChecks(CheckType.CurrentTitle, titleName));
+                    break;
             }
 
         }
@@ -1218,6 +1226,21 @@ namespace Server.MirObjects
 
                     acts.Add(new NPCActions(ActionType.HeroRemoveSkill, parts[1]));
                     break;
+                case "SETTITLE":
+                    // You can support no arguments (removes title)
+                    string titleArg = parts.Length > 1 ? string.Join(" ", parts.Skip(1).ToArray()) : string.Empty;
+                    string colorArg = "";
+                    if (parts.Length > 2)
+                    {
+                        if (parts[parts.Length - 1].Length == 8 && int.TryParse(parts[parts.Length - 1], System.Globalization.NumberStyles.HexNumber, null, out _))
+                        {
+                            colorArg = parts[parts.Length - 1];
+                            titleArg = string.Join(" ", parts.Skip(1).Take(parts.Length - 2).ToArray());
+                        }
+                    }
+                    acts.Add(new NPCActions(ActionType.SetTitle, titleArg, colorArg));
+                    break;
+
             }
         }
 
@@ -1435,6 +1458,9 @@ namespace Server.MirObjects
                     break;
                 case "USERNAME":
                     newValue = player.Name;
+                    break;
+                case "CURRENTTITLE":
+                    newValue = player.CurrentTitle;
                     break;
                 case "LEVEL":
                     newValue = player.Level.ToString(CultureInfo.InvariantCulture);
@@ -2887,6 +2913,9 @@ namespace Server.MirObjects
                             failed = !player.HasBuff(buffType);
                         }
                         break;
+                    case CheckType.CurrentTitle:
+                        failed = !string.Equals(player.Info.CharacterTitle, param[0], StringComparison.OrdinalIgnoreCase);
+                        break;         
                 }
 
                 if (!failed) continue;
@@ -4695,6 +4724,30 @@ namespace Server.MirObjects
                             player.ReceiveChat($"Sieges repaired: {_fixed}/{conquest.SiegeList.Count}", ChatType.System);
                             MessageQueue.Enqueue($"Sieges repaired: {_fixed}/{conquest.SiegeList.Count}");
 
+                            break;
+                        }
+                    case ActionType.SetTitle:
+                        {
+                            string title = act.Params.Count > 0 ? act.Params[0] : string.Empty;
+                            int color = System.Drawing.Color.White.ToArgb();
+                            if (act.Params.Count > 1 && !string.IsNullOrEmpty(act.Params[1]))
+                            {
+                                if (act.Params[1].Length == 8 && int.TryParse(act.Params[1], System.Globalization.NumberStyles.HexNumber, null, out int parsedColor))
+                                    color = parsedColor;
+                                else if (int.TryParse(act.Params[1], out int intColor))
+                                    color = intColor;
+                            }
+                            player.Info.CharacterTitle = title;
+                            player.Info.TitleColorARGB = color;
+                            player.RefreshStats();
+                            player.BroadcastInfo();
+                            if (player.Connection != null)
+                                player.GetUserInfo(player.Connection);
+
+                            if (!string.IsNullOrEmpty(title))
+                                player.ReceiveChat($"You received the title: {title}", ChatType.System);
+                            else
+                                player.ReceiveChat("Your title has been cleared.", ChatType.System);
                             break;
                         }
                 }

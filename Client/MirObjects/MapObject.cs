@@ -112,7 +112,7 @@ namespace Client.MirObjects
 
         public MLibrary BodyLibrary;
         public Color DrawColour = Color.White, NameColour = Color.White, LightColour = Color.White;
-        public MirLabel NameLabel, ChatLabel, GuildLabel;
+        public MirLabel NameLabel, ChatLabel, GuildLabel, TitleLabel;
         public long ChatTime;
         public int DrawFrame, DrawWingFrame;
         public Point DrawLocation, Movement, FinalDrawLocation, OffSetMove;

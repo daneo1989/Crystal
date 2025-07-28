@@ -728,6 +728,13 @@ namespace Server.MirNetwork
                 case (short)ClientPacketIds.PurchaseGuildTerritory:
                     PurchaseGuildTerritory((C.PurchaseGuildTerritory)p);
                     return;
+                case (short)ClientPacketIds.SaveNotebook:
+                    SaveNotebook((C.SaveNotebook)p);
+                    return;
+                case (short)ClientPacketIds.RequestNotebook:
+                    if (Player != null)
+                        Player.LoadNotebook();
+                    break;
                 default:
                     MessageQueue.Enqueue(string.Format("Invalid packet received. Index : {0}", p.Index));
                     break;
@@ -2103,6 +2110,11 @@ namespace Server.MirNetwork
 
             Enqueue(new S.NewHeroInfo { Info = heroInfo.ClientInformation });
             SentHeroInfo.Add(item.UniqueID);
+        }
+        private void SaveNotebook(C.SaveNotebook p)
+        {
+            if (Player == null) return;
+            Player.SaveNotebook(p.Content);
         }
     }
 

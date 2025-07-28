@@ -19,7 +19,7 @@ namespace Client.MirScenes.Dialogs
         }
 
         public MirImageControl ExperienceBar, WeightBar, LeftCap, RightCap;
-        public MirButton GameShopButton, MenuButton, InventoryButton, CharacterButton, SkillButton, QuestButton, OptionButton;
+        public MirButton GameShopButton, MenuButton, InventoryButton, CharacterButton, SkillButton, QuestButton, OptionButton, JournalButton;
         public MirControl HealthOrb;
         public MirLabel HealthLabel, ManaLabel, TopLabel, BottomLabel, LevelLabel, CharacterName, ExperienceLabel, GoldLabel, WeightLabel, SpaceLabel, AModeLabel, PModeLabel, SModeLabel;
         public HeroInfoPanel HeroInfoPanel;
@@ -124,7 +124,7 @@ namespace Client.MirScenes.Dialogs
                     GameScene.Scene.CharacterDialog.ShowSkillPage();
                 }
             };
-
+            /*
             QuestButton = new MirButton
             {
                 HoverIndex = 1910,
@@ -141,6 +141,38 @@ namespace Client.MirScenes.Dialogs
                 if (!GameScene.Scene.QuestLogDialog.Visible)
                     GameScene.Scene.QuestLogDialog.Show();
                 else GameScene.Scene.QuestLogDialog.Hide();
+            };
+            */
+
+            JournalButton = new MirButton
+            {
+                HoverIndex = 1910,
+                Index = 1909,
+                Library = Libraries.Prguse,
+                Location = new Point(this.Size.Width - 50, 76),
+                Parent = this,
+                PressedIndex = 1911,
+                Sound = SoundList.ButtonA,
+                Hint = string.Format(GameLanguage.Journal, CMain.InputKeys.GetKey(KeybindOptions.Journal))
+            };
+            JournalButton.Click += (o, e) =>
+            {
+                if (AdventurerJournalDialog.Instance == null)
+                {
+                    AdventurerJournalDialog.Instance = new AdventurerJournalDialog
+                    {
+                        Parent = GameScene.Scene
+                    };
+                }
+                if (!AdventurerJournalDialog.Instance.Visible)
+                {
+                    AdventurerJournalDialog.Instance.Show();
+                    AdventurerJournalDialog.Instance.ShowNotebook();
+                }
+                else
+                {
+                    AdventurerJournalDialog.Instance.Hide();
+                }
             };
 
             OptionButton = new MirButton
