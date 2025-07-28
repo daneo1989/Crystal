@@ -541,6 +541,9 @@ namespace ServerPackets
         public int HP, MP;
         public long Experience, MaxExperience;
 
+        public string CharacterTitle = string.Empty;
+        public int TitleColorARGB = Color.White.ToArgb();
+
         public LevelEffects LevelEffects;
 
         public bool HasHero;
@@ -566,6 +569,8 @@ namespace ServerPackets
             ObjectID = reader.ReadUInt32();
             RealId = reader.ReadUInt32();
             Name = reader.ReadString();
+            CharacterTitle = reader.ReadString();
+            TitleColorARGB = reader.ReadInt32();
             GuildName = reader.ReadString();
             GuildRank = reader.ReadString();
             NameColour = Color.FromArgb(reader.ReadInt32());
@@ -644,6 +649,8 @@ namespace ServerPackets
             writer.Write(ObjectID);
             writer.Write(RealId);
             writer.Write(Name);
+            writer.Write(CharacterTitle);
+            writer.Write(TitleColorARGB);
             writer.Write(GuildName);
             writer.Write(GuildRank);
             writer.Write(NameColour.ToArgb());
@@ -831,6 +838,8 @@ namespace ServerPackets
 
         public uint ObjectID;
         public string Name = string.Empty;
+        public string CharacterTitle = string.Empty;
+        public int TitleColorARGB = Color.White.ToArgb();
         public string GuildName = string.Empty;
         public string GuildRankName = string.Empty;
         public Color NameColour;
@@ -866,6 +875,8 @@ namespace ServerPackets
         {
             ObjectID = reader.ReadUInt32();
             Name = reader.ReadString();
+            CharacterTitle = reader.ReadString();
+            TitleColorARGB = reader.ReadInt32();
             GuildName = reader.ReadString();
             GuildRankName = reader.ReadString();
             NameColour = Color.FromArgb(reader.ReadInt32());
@@ -908,6 +919,8 @@ namespace ServerPackets
         {
             writer.Write(ObjectID);
             writer.Write(Name);
+            writer.Write(CharacterTitle); 
+            writer.Write(TitleColorARGB);
             writer.Write(GuildName);
             writer.Write(GuildRankName);
             writer.Write(NameColour.ToArgb());

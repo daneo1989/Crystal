@@ -1510,7 +1510,7 @@ namespace Server.MirObjects
                 c.CheckItem(item);
             }
         }
-        private void GetUserInfo(MirConnection c)
+        public void GetUserInfo(MirConnection c)//was private luke
         {
             string guildname = MyGuild != null ? MyGuild.Name : "";
             string guildrank = MyGuild != null ? MyGuildRank.Name : "";
@@ -1547,7 +1547,10 @@ namespace Server.MirObjects
                 HasExpandedStorage = Account.ExpandedStorageExpiryDate > Envir.Now ? true : false,
                 ExpandedStorageExpiryTime = Account.ExpandedStorageExpiryDate,
                 AllowObserve = AllowObserve,
-                Observer = c != Connection
+                Observer = c != Connection,
+
+                CharacterTitle = Info.CharacterTitle,
+                TitleColorARGB = Info.TitleColorARGB,
             };
 
             //Copy this method to prevent modification before sending packet information.
@@ -3993,6 +3996,47 @@ namespace Server.MirObjects
                         Enqueue(GetUpdateInfo());
                         Broadcast(GetUpdateInfo());
                         break;
+
+                    case "SETTITLE":
+                        if (!IsGM) return;
+                        if (parts.Length < 2)
+                        {
+                            // No title provided: clear the title
+                            Info.CharacterTitle = string.Empty;
+                            Info.TitleColorARGB = System.Drawing.Color.White.ToArgb(); // or your default
+                            RefreshStats();
+                            BroadcastInfo();
+                            ReceiveChat("Your title has been removed.", ChatType.System);
+                            if (Connection != null)
+                                GetUserInfo(Connection);
+                            return;
+                        }
+                        // Support optional ARGB color at end
+                        string colorString = null;
+                        string titleText;
+                        if (parts.Length > 2 && parts[parts.Length - 1].Length == 8 && int.TryParse(parts[parts.Length - 1], System.Globalization.NumberStyles.HexNumber, null, out _))
+                        {
+                            colorString = parts[parts.Length - 1];
+                            titleText = string.Join(" ", parts.Skip(1).Take(parts.Length - 2));
+                        }
+                        else
+                        {
+                            titleText = string.Join(" ", parts.Skip(1));
+                        }
+                        Info.CharacterTitle = titleText;
+                        if (!string.IsNullOrEmpty(colorString))
+                            Info.TitleColorARGB = int.Parse(colorString, System.Globalization.NumberStyles.HexNumber);
+                        else
+                            Info.TitleColorARGB = System.Drawing.Color.White.ToArgb(); // <<-- Default is white!
+
+                        RefreshStats();
+                        BroadcastInfo();
+                        ReceiveChat($"Your title is now: {Info.CharacterTitle}", ChatType.System);
+
+                        if (Connection != null)
+                            GetUserInfo(Connection);
+
+                        break;
                     default:
                         break;
                 }
@@ -4618,7 +4662,10 @@ namespace Server.MirObjects
 
                 Buffs = Buffs.Where(d => d.Info.Visible).Select(e => e.Type).ToList(),
 
-                LevelEffects = LevelEffects
+                LevelEffects = LevelEffects,
+
+                CharacterTitle = Info.CharacterTitle,
+                TitleColorARGB = Info.TitleColorARGB,
             };
         }
         public void EquipSlotItem(MirGridType grid, ulong id, int to, MirGridType gridTo, ulong idTo)
@@ -14108,6 +14155,8 @@ namespace Server.MirObjects
         }
 
         public string NotebookPath => $@"Envir\NoteBook\{Name}.txt";
+
+        //public object CharacterTitle { get; internal set; }
 
         public void LoadNotebook()
         {

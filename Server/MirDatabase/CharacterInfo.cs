@@ -106,6 +106,9 @@ namespace Server.MirDatabase
         public bool HeroSpawned;
         public HeroBehaviour HeroBehaviour;
 
+        public string CharacterTitle = string.Empty;
+        public int TitleColorARGB = Color.White.ToArgb();
+
         public CharacterInfo() { }
 
         public CharacterInfo(ClientPackets.NewCharacter p, MirConnection c)
@@ -117,6 +120,9 @@ namespace Server.MirDatabase
 
             CreationIP = c.IPAddress;
             CreationDate = Envir.Now;
+
+            CharacterTitle = string.Empty;
+            TitleColorARGB = Color.White.ToArgb();
         }
 
         public CharacterInfo(BinaryReader reader, int version, int customVersion)
@@ -380,6 +386,17 @@ namespace Server.MirDatabase
 
             if (version > 100)
                 HeroBehaviour = (HeroBehaviour)reader.ReadByte();
+
+            if (version >= 113)
+            {
+                CharacterTitle = reader.ReadString();
+                TitleColorARGB = reader.ReadInt32();
+            }
+            else
+            {
+                CharacterTitle = string.Empty;
+                TitleColorARGB = Color.White.ToArgb();
+            }
         }
 
         public virtual void Save(BinaryWriter writer)
@@ -561,6 +578,9 @@ namespace Server.MirDatabase
             writer.Write(CurrentHeroIndex);
             writer.Write(HeroSpawned);
             writer.Write((byte)HeroBehaviour);
+
+            writer.Write(CharacterTitle ?? "");
+            writer.Write(TitleColorARGB);
         }
 
         public SelectInfo ToSelectInfo()

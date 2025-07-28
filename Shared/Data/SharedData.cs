@@ -9,6 +9,9 @@ public class SelectInfo
     public MirGender Gender;
     public DateTime LastAccess;
 
+    public string CharacterTitle = string.Empty;
+    public int TitleColorARGB = unchecked((int)0xFFFFFFFF);
+
     public SelectInfo() { }
 
     public SelectInfo(BinaryReader reader)
@@ -19,6 +22,9 @@ public class SelectInfo
         Class = (MirClass)reader.ReadByte();
         Gender = (MirGender)reader.ReadByte();
         LastAccess = DateTime.FromBinary(reader.ReadInt64());
+
+        CharacterTitle = reader.ReadString();
+        TitleColorARGB = reader.ReadInt32();
     }
     public void Save(BinaryWriter writer)
     {
@@ -28,6 +34,9 @@ public class SelectInfo
         writer.Write((byte)Class);
         writer.Write((byte)Gender);
         writer.Write(LastAccess.ToBinary());
+
+        writer.Write(CharacterTitle ?? "");
+        writer.Write(TitleColorARGB);
     }
 }
 
@@ -51,6 +60,9 @@ public class RankCharacterInfo
     public object info;//again only keep this on server!
     public DateTime LastUpdated;
 
+    public string CharacterTitle = string.Empty;
+    public int TitleColorARGB = unchecked((int)0xFFFFFFFF);
+
     public RankCharacterInfo()
     {
 
@@ -62,6 +74,9 @@ public class RankCharacterInfo
         level = reader.ReadInt32();
         Class = (MirClass)reader.ReadByte();
 
+        CharacterTitle = reader.ReadString();
+        TitleColorARGB = reader.ReadInt32();
+
     }
     public void Save(BinaryWriter writer)
     {
@@ -69,6 +84,9 @@ public class RankCharacterInfo
         writer.Write(Name);
         writer.Write(level);
         writer.Write((byte)Class);
+
+        writer.Write(CharacterTitle ?? "");
+        writer.Write(TitleColorARGB);
     }
 }
 

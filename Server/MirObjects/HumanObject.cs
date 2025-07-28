@@ -111,7 +111,7 @@ namespace Server.MirObjects
         public MountInfo Mount
         {
             get { return Info.Mount; }
-        }        
+        }
 
         public Reporting Report;
         public virtual bool CanMove
@@ -157,6 +157,7 @@ namespace Server.MirObjects
                     !CurrentPoison.HasFlag(PoisonType.Paralysis) && !CurrentPoison.HasFlag(PoisonType.Frozen) && Mount.CanAttack;
             }
         }
+        public string CurrentTitle => string.IsNullOrEmpty(Info.CharacterTitle) ? "No Title" : Info.CharacterTitle;
 
         protected bool CheckCellTime = true;
 
@@ -1730,7 +1731,7 @@ namespace Server.MirObjects
         {
             if (HasUpdatedBaseStats == false)
             {
-                SendBaseStats();                
+                SendBaseStats();
                 HasUpdatedBaseStats = true;
             }
 
@@ -1745,27 +1746,27 @@ namespace Server.MirObjects
             RefreshBuffs();
             RefreshGuildBuffs();
 
-            //Add any rate percent changes
+ //Add any rate percent changes
 
-            Stats[Stat.HP] += (Stats[Stat.HP] * Stats[Stat.HPRatePercent]) / 100;
-            Stats[Stat.MP] += (Stats[Stat.MP] * Stats[Stat.MPRatePercent]) / 100;
-            Stats[Stat.MaxAC] += (Stats[Stat.MaxAC] * Stats[Stat.MaxACRatePercent]) / 100;
-            Stats[Stat.MaxMAC] += (Stats[Stat.MaxMAC] * Stats[Stat.MaxMACRatePercent]) / 100;
+                Stats[Stat.HP] += (Stats[Stat.HP] * Stats[Stat.HPRatePercent]) / 100;
+                Stats[Stat.MP] += (Stats[Stat.MP] * Stats[Stat.MPRatePercent]) / 100;
+                Stats[Stat.MaxAC] += (Stats[Stat.MaxAC] * Stats[Stat.MaxACRatePercent]) / 100;
+                Stats[Stat.MaxMAC] += (Stats[Stat.MaxMAC] * Stats[Stat.MaxMACRatePercent]) / 100;
 
-            Stats[Stat.MaxDC] += (Stats[Stat.MaxDC] * Stats[Stat.MaxDCRatePercent]) / 100;
-            Stats[Stat.MaxMC] += (Stats[Stat.MaxMC] * Stats[Stat.MaxMCRatePercent]) / 100;
-            Stats[Stat.MaxSC] += (Stats[Stat.MaxSC] * Stats[Stat.MaxSCRatePercent]) / 100;
-            Stats[Stat.AttackSpeed] += (Stats[Stat.AttackSpeed] * Stats[Stat.AttackSpeedRatePercent]) / 100;
+                Stats[Stat.MaxDC] += (Stats[Stat.MaxDC] * Stats[Stat.MaxDCRatePercent]) / 100;
+                Stats[Stat.MaxMC] += (Stats[Stat.MaxMC] * Stats[Stat.MaxMCRatePercent]) / 100;
+                Stats[Stat.MaxSC] += (Stats[Stat.MaxSC] * Stats[Stat.MaxSCRatePercent]) / 100;
+                Stats[Stat.AttackSpeed] += (Stats[Stat.AttackSpeed] * Stats[Stat.AttackSpeedRatePercent]) / 100;
 
-            RefreshStatCaps();
+                RefreshStatCaps();
 
-            if (HP > Stats[Stat.HP]) SetHP(Stats[Stat.HP]);
-            if (MP > Stats[Stat.MP]) SetMP(Stats[Stat.MP]);
+                if (HP > Stats[Stat.HP]) SetHP(Stats[Stat.HP]);
+                if (MP > Stats[Stat.MP]) SetMP(Stats[Stat.MP]);
 
-            AttackSpeed = 1400 - ((Stats[Stat.AttackSpeed] * 60) + Math.Min(370, (Level * 14)));
+                AttackSpeed = 1400 - ((Stats[Stat.AttackSpeed] * 60) + Math.Min(370, (Level * 14)));
 
-            if (AttackSpeed < 550) AttackSpeed = 550;
-        }
+                if (AttackSpeed < 550) AttackSpeed = 550;
+            }
         public virtual void RefreshGuildBuffs() { }
 
         public virtual void RefreshMaxExperience() { }
@@ -5984,7 +5985,7 @@ namespace Server.MirObjects
                     }
 
                     if (!MagicTeleport(magic))
-                        return;                    
+                        return;
 
                     AddBuff(BuffType.TemporalFlux, this, Settings.Second * 30, new Stats { [Stat.TeleportManaPenaltyPercent] = 30 });
                     LevelMagic(magic);
@@ -6491,7 +6492,7 @@ namespace Server.MirObjects
                                         if (hasVampBuff)//Vampire Effect
                                         {
                                             //cancel out buff
-                                            AddBuff(BuffType.VampireShot, this, 0, new Stats());
+                                           AddBuff(BuffType.VampireShot, this, 0, new Stats());
 
                                             target.Attacked(this, value, DefenceType.MAC, false);
                                             if (VampAmount == 0) VampTime = Envir.Time + Settings.Second;
